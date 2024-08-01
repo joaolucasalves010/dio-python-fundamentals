@@ -4,7 +4,7 @@ def sacar(valor):
   if saldo_atual >= valor:
     print('Valor sacado')
     print(f'Saldo atual {saldo_atual}')
-  elif saldo_atual < valor:
+  else:
     print('Saldo insuficiente')
     print(f'Saldo disponivel {saldo_atual}')
   print('Obrigado por ser nosso cliente, tenha um Bom Dia!')    
