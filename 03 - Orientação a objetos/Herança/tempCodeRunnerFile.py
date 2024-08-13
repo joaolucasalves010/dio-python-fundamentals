@@ -1,0 +1,2 @@
+
+class Mamifero(Animal):

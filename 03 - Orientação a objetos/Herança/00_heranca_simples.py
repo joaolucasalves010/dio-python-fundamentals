@@ -10,6 +10,9 @@ class Veiculo:
   def __str__(self):
     return f"Cor: {self.cor}, Numero de rodas: {self.n_rodas}, Placa: {self.placa}"
 
+  def buzinar(self):
+    print("BiBiBi")
+
 class Carro(Veiculo):
   pass
 
@@ -21,10 +24,12 @@ class Caminhao(Veiculo):
   def esta_carregado(self):
     print(f"Sim" if self.carregado else "Não estou carregado") 
 
+  def buzinar(self):
+    super().buzinar()
+    print("bamBamBam") 
+
 class Motocicleta(Veiculo):
   pass
-
-
 
 
 moto = Motocicleta("Vermelha", "NZQ3048", 2)
@@ -33,4 +38,5 @@ print(moto)
 caminhao = Caminhao("Preto", 'AQD1023', 8, False)
 caminhao.ligar_motor()
 caminhao.esta_carregado()
+caminhao.buzinar()
 print(caminhao)
