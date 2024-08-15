@@ -34,3 +34,4 @@ carro = Automovel(n_rodas=4, tipo_combustivel="Gasolina", placa="OES-3928", cor=
 
 print(moto)
 print(carro)
+
