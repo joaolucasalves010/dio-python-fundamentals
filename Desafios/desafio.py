@@ -198,7 +198,7 @@ def criar_cliente(clientes):
 
 def menu():
   texto = """\n
-    ================ MENU ================
+    ================MENU================
     [d]\tDepositar
     [s]\tSacar
     [e]\tExtrato
