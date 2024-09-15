@@ -50,6 +50,19 @@ class Conta:
     
     return True
 
+  def sacar(self, valor):
+   saldo = self.saldo
+   saldo_insuficiente = valor > saldo
+
+   if saldo_insuficiente:
+    print("Operação negada você não tem saldo suficiente!")
+   elif valor > 0:
+    self.saldo -= valor
+    print("Saque realizado com sucesso")
+    # TODO return true
+   else:
+    print("Operação inválida verifique o valor e tente novamente!")
+
 class ContaCorrente(Conta):
   def __init__(self, numero, cliente, limite=500, limite_saques=3):
     super().__init__(cliente, numero)
@@ -75,6 +88,34 @@ class Deposito(Transacao):
 
   def registrar(self, conta):
     sucesso_transacao = conta.depositar(self.valor)
+
+class Saque(Transacao):
+  def __init__(self, valor):
+    self._valor = valor
+
+  @property
+  def valor(self):
+    return self._valor
+
+  def registrar(self, conta):
+    sucesso_transacao = conta.sacar(self.valor)
+
+def sacar(clientes):
+  cpf = input("Digite seu cpf (apenas numeros) ")
+  cliente = filtrar_clientes(clientes, cpf)
+
+  if not cliente:
+    print("Não existe cliente cadastrado com este cpf!")
+    return
+  
+  valor = float(input("Digite o valor do saque: "))
+  transacao = Saque(valor)
+
+  conta = recuperar_conta_cliente(cliente)
+  if not conta:
+    return
+
+  cliente.realizar_transacao(conta, transacao)
 
 
 def depositar(clientes):
@@ -179,7 +220,7 @@ def main():
     if opcao.lower() == 'd':
       depositar(clientes)
     elif opcao.lower() == 's':
-      # sacar
+      sacar(clientes)
       pass
     elif opcao.lower() == 'e':
       # extrato
