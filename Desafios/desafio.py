@@ -24,10 +24,60 @@ class ContasIterador:
     finally:
       self._index += 1
 
+class Historico:
+  def __init__(self):
+    self._transacoes = []
+
+  @property
+  def transacoes(self):
+    return self._transacoes
+
+  def adicionar_transacao(self, transacao):
+    self._transacoes.append(
+      {
+        "tipo":  transacao.__class__.__name__,
+        "valor": transacao.valor,
+        "data": datetime.now().strftime("%d-%m-%Y %H:%M:%S"),
+      }
+    )  
+
+  def gerar_relatorio(self, tipo_transacao=None):
+    for transacao in self._transacoes:
+      if tipo_transacao is None or transacao["tipo"].lower() == tipo_transacao.lower():
+        yield transacao 
+
 def listar_contas(contas):
   for conta in ContasIterador(contas):
     print("=" * 100)
     print(textwrap.dedent(str(conta)))
+
+def exibir_extrato(clientes):
+  cpf = input("Informe o cpf do cliente: ")
+  cliente = filtrar_clientes(clientes, cpf)
+
+  if not cliente:
+    print("Não existe cliente cadastrado com este cpf")
+    return
+  
+  conta = recuperar_conta_cliente(cliente)
+
+  if not conta:
+    return
+
+  print("\n================ EXTRATO ================")
+  extrato=""
+  tem_transacao = False
+  
+  for transacao in conta.historico.gerar_relatorio(tipo_transacao="saque"):
+    tem_transacao = True
+    extrato += f"\n{transacao['tipo']}:\n\tR$ {transacao['valor']:.2f}"
+
+  if not tem_transacao:
+    extrato = "Não foram realizadas movimentações"
+
+  print(extrato)
+  print(f"Saldo: {conta.saldo:.2f}")
+  print("==========================================")
 
 class Conta:
   def __init__(self, cliente, numero):
@@ -35,6 +85,7 @@ class Conta:
     self.numero = numero
     self.saldo = 0
     self.agencia = "0001"
+    self.historico = Historico()
 
   @classmethod
   def nova_conta(cls, numero, cliente):
@@ -59,7 +110,7 @@ class Conta:
    elif valor > 0:
     self.saldo -= valor
     print("Saque realizado com sucesso")
-    # TODO return true
+    return True
    else:
     print("Operação inválida verifique o valor e tente novamente!")
 
@@ -89,6 +140,9 @@ class Deposito(Transacao):
   def registrar(self, conta):
     sucesso_transacao = conta.depositar(self.valor)
 
+    if sucesso_transacao:
+      conta.historico.adicionar_transacao(self)
+
 class Saque(Transacao):
   def __init__(self, valor):
     self._valor = valor
@@ -99,6 +153,9 @@ class Saque(Transacao):
 
   def registrar(self, conta):
     sucesso_transacao = conta.sacar(self.valor)
+
+    if sucesso_transacao:
+      conta.historico.adicionar_transacao(self)
 
 def sacar(clientes):
   cpf = input("Digite seu cpf (apenas numeros) ")
@@ -223,7 +280,7 @@ def main():
       sacar(clientes)
       pass
     elif opcao.lower() == 'e':
-      # extrato
+      exibir_extrato(clientes)
       pass
     elif opcao.lower() == 'nc':
       numero_da_conta = len(contas) + 1
