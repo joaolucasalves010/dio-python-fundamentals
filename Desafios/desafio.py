@@ -68,14 +68,15 @@ def exibir_extrato(clientes):
   extrato=""
   tem_transacao = False
   
-  for transacao in conta.historico.gerar_relatorio(tipo_transacao="saque"):
+  for transacao in conta.historico.gerar_relatorio():
     tem_transacao = True
-    extrato += f"\n{transacao['tipo']}:\n\tR$ {transacao['valor']:.2f}"
+    extrato += f"\n{transacao['tipo']}:\n\tR$ {transacao['valor']:.2f}\n Saque realizado as: {transacao['data']}"
 
   if not tem_transacao:
     extrato = "Não foram realizadas movimentações"
 
   print(extrato)
+  
   print(f"Saldo: {conta.saldo:.2f}")
   print("==========================================")
 
@@ -86,15 +87,21 @@ class Conta:
     self.saldo = 0
     self.agencia = "0001"
     self.historico = Historico()
+    self.limite_transacoes = 0
 
   @classmethod
   def nova_conta(cls, numero, cliente):
      return cls(numero, cliente)
 
   def depositar(self, valor):
-    if valor > 0:
+    
+    if self.limite_transacoes == 10:
+      print("Limite de transações excedido")
+      return False
+    elif valor > 0:
       self.saldo += valor
       print("Deposito realizado com sucesso")
+      self.limite_transacoes += 1
     else:
       print("A operação falhou! O valor informado é inválido")
       return False
@@ -107,9 +114,13 @@ class Conta:
 
    if saldo_insuficiente:
     print("Operação negada você não tem saldo suficiente!")
+   elif self.limite_transacoes == 10:
+    print("Limite de transacoes excedido")
+    return False
    elif valor > 0:
     self.saldo -= valor
     print("Saque realizado com sucesso")
+    self.limite_transacoes += 1
     return True
    else:
     print("Operação inválida verifique o valor e tente novamente!")
@@ -154,8 +165,8 @@ class Saque(Transacao):
   def registrar(self, conta):
     sucesso_transacao = conta.sacar(self.valor)
 
-    if sucesso_transacao:
-      conta.historico.adicionar_transacao(self)
+    if sucesso_transacao:    
+      conta.historico.adicionar_transacao(self)     
 
 def sacar(clientes):
   cpf = input("Digite seu cpf (apenas numeros) ")
