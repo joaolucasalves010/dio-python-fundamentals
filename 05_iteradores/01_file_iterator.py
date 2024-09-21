@@ -13,5 +13,5 @@ class FileIterator:
       self.file.close()
       raise StopIteration
 
-for i,line in enumerate(FileIterator('wordlist_de_8k.txt')):
+for i,line in enumerate(FileIterator('C:\Workspace\Python\.txt\wordlist_de_8k.txt')):
   print(f"{i + 1} " + line)
