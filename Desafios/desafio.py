@@ -1,6 +1,19 @@
 import textwrap
 from datetime import datetime
 from abc import ABC, abstractclassmethod, abstractproperty
+from pathlib import Path
+
+def log_transacao(function):
+  def envelope(*args, **kwargs):
+    resultado = function(*args, **kwargs)
+    with open("log.txt", "a", encoding="utf-8") as file:
+      file.write(
+        f"{datetime.now().strftime("%d-%M-%Y %H:%M:%S")} executando a função {function.__name__} executada com argumento {args} {kwargs}. "
+        f"Retorno {resultado}\n"
+      )
+    return resultado
+
+  return envelope  
 
 class ContasIterador:
   def __init__(self, contas):
@@ -51,6 +64,7 @@ def listar_contas(contas):
     print("=" * 100)
     print(textwrap.dedent(str(conta)))
 
+@log_transacao
 def exibir_extrato(clientes):
   cpf = input("Informe o cpf do cliente: ")
   cliente = filtrar_clientes(clientes, cpf)
@@ -168,6 +182,7 @@ class Saque(Transacao):
     if sucesso_transacao:    
       conta.historico.adicionar_transacao(self)     
 
+@log_transacao
 def sacar(clientes):
   cpf = input("Digite seu cpf (apenas numeros) ")
   cliente = filtrar_clientes(clientes, cpf)
@@ -185,7 +200,7 @@ def sacar(clientes):
 
   cliente.realizar_transacao(conta, transacao)
 
-
+@log_transacao
 def depositar(clientes):
   cpf = input("Digite seu cpf (apenas numeros) ")
   cliente = filtrar_clientes(clientes, cpf)
@@ -225,6 +240,7 @@ class PessoaFisica(Cliente):
       self.nome = nome
       self.data_nascimento = data_nascimento
       
+@log_transacao      
 def criar_conta(numero_da_conta, clientes, contas):
   cpf = input("Informe seu cpf: ")
   cliente = filtrar_clientes(clientes, cpf)
@@ -243,6 +259,7 @@ def filtrar_clientes(clientes, cpf):
   clientes_filtrados = [cliente for cliente in clientes if cliente.cpf == cpf]
   return clientes_filtrados[0] if clientes_filtrados else None
 
+@log_transacao
 def criar_cliente(clientes):
   cpf = input("Digite seu cpf (apenas números): ")
   
