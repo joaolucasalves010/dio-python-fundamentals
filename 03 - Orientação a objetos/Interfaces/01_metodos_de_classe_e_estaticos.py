@@ -18,7 +18,7 @@ class Pessoa:
 p1 = Pessoa("João", 16)
 print(p1.idade, p1.nome)
 
-p2 = Pessoa.criar_de_data_nascimento(2008, 5, 14, "João")
+p2 = Pessoa.criar_de_data_nascimento(ano=2008, mes=5, dia=14, nome="Joao Lucas")
 print(p2.idade, p2.nome)
 
 print(Pessoa.maior_idade(18))

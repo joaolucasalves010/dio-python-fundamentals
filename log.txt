@@ -1,0 +1,8 @@
+25-59-2024 15:59:38 executando a fun��o criar_cliente executada com argumento ([<__main__.PessoaFisica object at 0x00000197D0CA0110>],) {}Retorno None
+25-00-2024 16:00:25 executando a função criar_cliente executada com argumento ([<__main__.PessoaFisica object at 0x000001ABA10AC2C0>],) {}Retorno None
+25-00-2024 16:00:31 executando a função criar_conta executada com argumento (1, [<__main__.PessoaFisica object at 0x000001ABA10AC2C0>], [<__main__.ContaCorrente object at 0x000001ABA10AC440>]) {}Retorno None
+02-42-2024 19:42:56 executando a função criar_cliente executada com argumento ([<PessoaFisica: ('Joao Lucas', '11681448505')>],) {}. Retorno None
+02-43-2024 19:43:02 executando a função criar_conta executada com argumento (1, [<PessoaFisica: ('Joao Lucas', '11681448505')>], [<ContaCorrente: ('0001', '1', 'Joao Lucas')>]) {}. Retorno None
+02-43-2024 19:43:08 executando a função depositar executada com argumento ([<PessoaFisica: ('Joao Lucas', '11681448505')>],) {}. Retorno None
+02-43-2024 19:43:18 executando a função sacar executada com argumento ([<PessoaFisica: ('Joao Lucas', '11681448505')>],) {}. Retorno None
+02-43-2024 19:43:27 executando a função exibir_extrato executada com argumento ([<PessoaFisica: ('Joao Lucas', '11681448505')>],) {}. Retorno None

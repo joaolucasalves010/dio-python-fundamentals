@@ -1,7 +1,7 @@
 salario = 2000
 
 def salario_bonus(bonus):
-  global salario
+  global salario 
   salario = salario + bonus
   return salario
 
