@@ -1,0 +1,2 @@
+
+cur.execute('CREATE TABLE IF NOT EXISTS m
