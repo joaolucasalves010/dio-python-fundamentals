@@ -51,7 +51,7 @@ def inserir_lote(conn, cursor, data):
 
 # inserir_lote(connection, cur, dados) 
 
-def consultar(conn, cursor, id):
+def consultar(cursor, id):
   cursor.execute('SELECT * FROM clientes WHERE id = ?', (id,))
   return cursor.fetchone()
 
@@ -59,9 +59,15 @@ def listar_clientes(conn, cursor):
   cursor.execute("SELECT * FROM clientes")
   return cursor.fetchall()
 
-cliente = consultar(connection, cur, 4)
-print(cliente)
-
 lista_clientes = listar_clientes(connection, cur)
 for cliente in lista_clientes:
   print(cliente)
+
+def recuperar_cliente(cursor, id):
+  cursor.row_factory = sqlite3.Row
+  cursor.execute("SELECT * FROM clientes WHERE id = ?", (id,))
+  result = cursor.fetchone()
+  return dict(result)
+
+cliente = recuperar_cliente(cur, 1)
+print(f"Bem vindo {cliente["nome"]}, ID: {cliente["id"]}, Email: {cliente["email"]}")
